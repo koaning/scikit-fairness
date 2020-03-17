@@ -33,7 +33,7 @@ def load_arrests(return_X_y=False, give_pandas=False):
     The documentation page of the dataset from the package can be viewed here:
     http://vincentarelbundock.github.io/Rdatasets/doc/carData/Arrests.html
     """
-    filepath = resource_filename("sklego", os.path.join("data", "arrests.zip"))
+    filepath = resource_filename("skfair", os.path.join("data", "arrests.zip"))
     df = pd.read_csv(filepath)
     if give_pandas:
         return df
