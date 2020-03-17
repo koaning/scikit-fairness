@@ -43,9 +43,7 @@ setup(
     author="Vincent D. Warmerdam & Matthijs Brouns",
     url="https://scikit-lego.readthedocs.io/en/latest/",
     packages=find_packages(exclude=["notebooks"]),
-    package_data={"sklego": ["data/*.zip"]},
-    long_description=read("readme.md"),
-    long_description_content_type="text/markdown",
+    package_data={"skfair": ["data/*.zip"]},
     install_requires=base_packages,
     extras_require={"docs": docs_packages, "dev": dev_packages, "test": test_packages},
     classifiers=[
