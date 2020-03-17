@@ -5,7 +5,7 @@ Submodules
 ----------
 
 
-sklego.base module
+skfair.preprocessing module
 ----------------------
 
 .. automodule:: skfair.preprocessing
@@ -13,7 +13,7 @@ sklego.base module
     :undoc-members:
     :show-inheritance:
 
-sklego.datasets module
+skfair.datasets module
 ----------------------
 
 .. automodule:: skfair.datasets
