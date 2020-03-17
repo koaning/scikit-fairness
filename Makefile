@@ -39,6 +39,7 @@ clean:
 	rm -rf scikit_lego.egg-info
 	rm -rf .ipynb_checkpoints
 	rm -rf .coverage*
+	rm -rf tests/**/__pycache__
 
 black:
 	black sklego tests setup.py

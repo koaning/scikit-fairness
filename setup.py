@@ -1,7 +1,7 @@
 import os
 from setuptools import setup, find_packages
 
-import sklego
+import skfair
 
 base_packages = [
     "numpy>=1.16.0",
@@ -37,9 +37,9 @@ def read(fname):
 
 
 setup(
-    name="scikit-lego",
-    version=sklego.__version__,
-    description="a collection of lego bricks for scikit-learn pipelines",
+    name="scikit-fairness",
+    version=skfair.__version__,
+    description="a collection of utilities to make algorithms more fair",
     author="Vincent D. Warmerdam & Matthijs Brouns",
     url="https://scikit-lego.readthedocs.io/en/latest/",
     packages=find_packages(exclude=["notebooks"]),
