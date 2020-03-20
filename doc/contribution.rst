@@ -4,7 +4,7 @@ Contribution
 .. image:: _static/contribute.png
    :align: center
 
-This project started becauser we saw people rewrite the same
+This project started because we saw people rewrite the same
 transformers and estimators at clients over and over again. Our
 goal is to have a place where more experimental building blocks
 for scikit learn pipelines might exist. This means we're usually
@@ -126,4 +126,4 @@ be guaranteed. To facilitate this we have some "standard" tests that will check 
 we change the shape of the input"? If your transformer belongs here: feel free to add it.
 
 .. _Pipeline: https://scikit-learn.org/stable/modules/compose.html
-.. _Github: https://github.com/koaning/scikit-lego/issues
+.. _Github: https://github.com/koaning/scikit-fairness/issues
