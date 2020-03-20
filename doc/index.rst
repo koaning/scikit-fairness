@@ -1,40 +1,35 @@
-.. scikit-lego documentation master file, created by
+.. scikit-fairness documentation master file, created by
    sphinx-quickstart on Tue Mar 19 20:15:46 2019.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-scikit-lego
+scikit-fairness
 ===========
 
 .. image:: _static/logo.png
 
-We love scikit learn but very often we find ourselves writing
-custom transformers, metrics and models. The goal of this project
-is to attempt to consolidate these into a package that offers
-code quality/testing. This project is a collaboration between
-multiple companies in the Netherlands. Note that we're not formally
-affiliated with the scikit-learn project at all.
+The goal of this project is to attempt to consolidate fairness 
+related metrics, transformers and models into a package that (hopefully)
+will become a contribution project to scikit-learn.
+
+Fairness, in data science, is a complex unsolved problem for which many 
+tactics are proposed - each with their own advantage and disadvantages. 
+This packages aims to make these tactics readily available,
+therefore enabling users to try and evaluate different fairness techniques.
 
 Disclaimer
 **********
 
-LEGO® is a trademark of the LEGO Group of companies which does not
-sponsor, authorize or endorse this project. Also note this package,
-albeit designing to be used on top of scikit-learn, is not associated with
-that project in any formal manner.
-
-The goal of the package is to allow you to joyfully build with
-new building blocks that are scikit-learn compatible.
-
+This package is not (yet) formally affiliated with scikit-learn. 
 
 Installation
 ************
 
-Install `scikit-lego` via pip with
+Install `scikit-fairness` via pip with
 
 .. code-block:: bash
 
-   pip install scikit-lego
+   pip install scikit-fairness
 
 
 Alternatively you can fork/clone and run:
@@ -49,17 +44,15 @@ Usage
 
 .. code-block:: python
 
-   from sklego.transformers import RandomAdder
-
-   from sklearn.preprocessing import StandardScaler
    from sklearn.linear_model import LogisticRegression
    from sklearn.pipeline import Pipeline
+
+   from skfairness.preprocessing import InformationFilter
 
    ...
 
    mod = Pipeline([
-       ("scale", StandardScaler()),
-       ("random_noise", RandomAdder()),
+       ("information_filter", InformationFilter()),
        ("model", LogisticRegression(solver='lbfgs'))
    ])
 
