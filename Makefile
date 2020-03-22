@@ -1,7 +1,7 @@
 .PHONY: docs
 
 flake:
-	flake8 sklego
+	flake8 skfair
 	flake8 tests
 	flake8 setup.py
 
@@ -14,10 +14,10 @@ develop:
 	python setup.py develop
 
 doctest:
-	python -m doctest -v sklego/*.py
+	python -m doctest -v skfair/*.py
 
 test: doctest
-	pytest --disable-warnings --cov=sklego
+	pytest --disable-warnings --cov=skfair
 	rm -rf .coverage*
 	pytest --nbval-lax doc/*.ipynb
 
@@ -25,7 +25,10 @@ precommit:
 	pre-commit run
 
 spelling:
-	codespell sklego/*.py
+	codespell skfair/*.py
+
+notebook:
+	jupyter nbconvert --to notebook --execute --ExecutePreprocessor.timeout=0 doc/fairness.ipynb --output doc/fairness.ipynb
 
 docs:
 	rm -rf doc/.ipynb_checkpoints
@@ -36,13 +39,13 @@ clean:
 	rm -rf build
 	rm -rf dist
 	rm -rf docs
-	rm -rf scikit_lego.egg-info
+	rm -rf scikit_fairness.egg-info
 	rm -rf .ipynb_checkpoints
 	rm -rf .coverage*
 	rm -rf tests/**/__pycache__
 
 black:
-	black sklego tests setup.py
+	black skfair tests setup.py
 
 check: flake precommit test spelling clean
 
