@@ -12,41 +12,43 @@ tactics are proposed - each with their own advantage and disadvantages.
 This packages aims to make these tactics readily available,
 therefore enabling users to try and evaluate different fairness techniques.
 
+## Documentation
+
+The documentation for this project can be found [here](https://scikit-fairness.netlify.app/).
+
+## Features 
+
 Consider all the steps in a machine learning pipeline.
 
 ![](doc/_static/steps.png)
 
 This package will offer tools at every step to make the pipeline more fair.
 
-## Documentation
-
-The documentation for this project can be found [here](https://scikit-fairness.netlify.app/).
-
-## Data
+#### Data
 
 We have datasets available that will help you benchmark your fairness tools.
 
 - `skfair.datasets.load_arrests`
 
-## Pre Processing
+#### Pre Processing
 
 We have filtering techniques that try to filter out information that correlates
 with sensitive attributes.
 
 - `skfair.preprocessing.InformationFilter`
 
-## Model
+#### Model
 
 We have models you're able to constrain with regards to a fairness metric.
 
 - `skfair.linear_model.DemographicParityClassifier`
 - `skfair.linear_model.EqualOpportunityClassifier`
 
-## Post Processing
+#### Post Processing
 
 We have meta estimators that allow you to correct the model after it has been trained.
 
-## Measure
+#### Measure
 
 We offer metrics that are designed to measure unfairness in your dataset.
 
