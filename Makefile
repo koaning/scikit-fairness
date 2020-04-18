@@ -53,3 +53,11 @@ pypi: clean
 	python setup.py sdist
 	python setup.py bdist_wheel --universal
 	twine upload dist/*
+
+pages:
+	cp -r docs/**/**/* ../scikit-fairness-docs
+	cd ../scikit-fairness-docs
+	git add .
+	git commit -m 'yet another docs version'
+	git push origin master
+	cd ../scikit-fairness
