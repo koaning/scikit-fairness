@@ -1,4 +1,3 @@
-[![Documentation Status](https://readthedocs.org/projects/scikit-fairness/badge/?version=latest)](https://scikit-fairness.readthedocs.io/en/latest/?badge=latest)
 
 <img src="doc/_static/logo.png" width="25%" height="25%" align="right" />
 
