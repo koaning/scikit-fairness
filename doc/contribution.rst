@@ -1,9 +1,6 @@
 Contribution
 ============
 
-.. image:: _static/contribute.png
-   :align: center
-
 This project started because we saw people rewrite the same
 transformers and estimators at clients over and over again. Our
 goal is to have a place where more experimental building blocks

@@ -24,7 +24,9 @@ class InformationFilter(BaseEstimator, TransformerMixin):
     columns :math:`x_1, ..., x_k`. If we assume columns :math:`x_1` and :math:`x_2`
     to be the sensitive columns then the information-filter will
     remove information by applying these transformations;
+
     .. math::
+
        \\begin{split}
        v_1 & = x_1 \\\\
        v_2 & = x_2 - \\frac{x_2 v_1}{v_1 v_1}\\\\
@@ -32,8 +34,10 @@ class InformationFilter(BaseEstimator, TransformerMixin):
        ... \\\\
        v_k & = x_k - \\frac{x_k v_1}{v_1 v_1} - \\frac{x_2 v_2}{v_2 v_2}
        \\end{split}
+
     Concatenating our vectors (but removing the sensitive ones) gives us
     a new training matrix :math:`X_{fair} =  [v_3, ..., v_k]`.
+
     :param columns: the columns to filter out this can be a sequence of either int
                     (in the case of numpy) or string (in the case of pandas).
     :param alpha: parameter to control how much to filter, for alpha=1 we filter out
