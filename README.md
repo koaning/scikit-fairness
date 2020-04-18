@@ -10,7 +10,7 @@ will become a contribution project to scikit-learn.
 
 Consider all the steps in a machine learning pipeline.
 
-![doc/_static/steps.png]()
+![](doc/_static/steps.png)
 
 This package will offer tools at every step to make the pipeline more fair.
 
