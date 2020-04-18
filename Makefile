@@ -54,10 +54,5 @@ pypi: clean
 	python setup.py bdist_wheel --universal
 	twine upload dist/*
 
-pages:
-	cp -r docs/**/**/* ../scikit-fairness-docs
-	cd ../scikit-fairness-docs
-	git add .
-	git commit -m 'yet another docs version'
-	git push origin master
-	cd ../scikit-fairness
+pages: docs
+	netlify deploy --dir docs --prod --site 81dfb2c9-cf7f-44ec-b78f-4525e0bd11bf --open

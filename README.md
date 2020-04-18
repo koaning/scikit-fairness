@@ -19,6 +19,10 @@ Consider all the steps in a machine learning pipeline.
 
 This package will offer tools at every step to make the pipeline more fair.
 
+## Documentation
+
+The documentation for this project can be found [here](https://scikit-fairness.netlify.app/).
+
 ## Data
 
 We have datasets available that will help you benchmark your fairness tools.
