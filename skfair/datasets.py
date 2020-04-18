@@ -1,7 +1,9 @@
 import os
-import numpy as np
 import pandas as pd
 from pkg_resources import resource_filename
+
+import warnings
+from skfair.warning import FairnessWarning
 
 
 def load_arrests(return_X_y=False, give_pandas=False):
@@ -35,6 +37,8 @@ def load_arrests(return_X_y=False, give_pandas=False):
     """
     filepath = resource_filename("skfair", os.path.join("data", "arrests.zip"))
     df = pd.read_csv(filepath)
+    warnings.warn(FairnessWarning("You are about to play with a potentially unfair dataset."))
+
     if give_pandas:
         return df
     X, y = (

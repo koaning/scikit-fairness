@@ -1,7 +1,7 @@
 Installation
 ============
 
-.. warning:: This project is experimental and is in alpha. We
+.. warning:: This project is just getting started. We
     do our best to keep things stable but you should assume that if
     you do not specify a version number that certain functionality
     can break.

@@ -4,23 +4,30 @@
    contain the root `toctree` directive.
 
 scikit-fairness
-===========
+===============
 
 .. image:: _static/logo.png
 
-The goal of this project is to attempt to consolidate fairness 
+The goal of this project is to attempt to consolidate fairness
 related metrics, transformers and models into a package that (hopefully)
 will become a contribution project to scikit-learn.
 
-Fairness, in data science, is a complex unsolved problem for which many 
-tactics are proposed - each with their own advantage and disadvantages. 
+Consider all the steps in a machine learning pipeline.
+
+.. image:: _static/steps.png
+
+This package will offer tools at every step.
+
+Fairness, in data science, is a complex unsolved problem for which many
+tactics are proposed - each with their own advantage and disadvantages.
 This packages aims to make these tactics readily available,
 therefore enabling users to try and evaluate different fairness techniques.
+
 
 Disclaimer
 **********
 
-This package is not (yet) formally affiliated with scikit-learn. 
+This package is not (yet, it is a goal) formally affiliated with scikit-learn.
 
 Installation
 ************
@@ -66,6 +73,6 @@ Usage
 
    install
    contribution
-   fairness.ipynb
+   fairness_boston_housing.ipynb
 
    api/modules
