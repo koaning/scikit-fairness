@@ -41,10 +41,48 @@ def load_arrests(return_X_y=False, give_pandas=False):
 
     if give_pandas:
         return df
+    colnames = ["colour", "year", "age", "sex", "employed", "citizen", "checks"]
     X, y = (
-        df[["colour", "year", "age", "sex", "employed", "citizen", "checks"]].values,
+        df[colnames].values,
         df["released"].values,
     )
     if return_X_y:
         return X, y
-    return {"data": X, "target": y}
+    return {"data": X, "target": y, 'feature_names': colnames}
+
+
+def load_boston(return_X_y=False, give_pandas=False):
+    """
+    Loads the boston housing dataset which can serve as a benchmark for fairness. It will be
+    removed from scikit-learn because there's big problems with it. In particular there's a
+    column (named `b`) that refers to the skin color of inhabitants.
+
+    You can read all about it here:
+
+    :param return_X_y: If True, returns ``(data, target)`` instead of a dict object.
+    :param give_pandas: give the pandas dataframe instead of X, y matrices (default=False)
+
+    :Example:
+    >>> from sklego.datasets import load_boston
+    >>> X, y = load_boston(return_X_y=True)
+    >>> X.shape
+    (506, 13)
+    >>> y.shape
+    (506,)
+    >>> load_arrests(give_pandas=True).columns
+    Index(['crim', 'zn', 'indus', 'chas', 'nox', 'rm', 'age', 'dis', 'rad', 'tax',
+           'ptratio', 'b', 'lstat', 'price'],
+          dtype='object')
+    """
+    filepath = resource_filename("skfair", os.path.join("data", "boston.zip"))
+    df = pd.read_csv(filepath)
+    warnings.warn(FairnessWarning("You are about to play with a notorious dataset."))
+
+    if give_pandas:
+        return df
+    colnames = ['crim', 'zn', 'indus', 'chas', 'nox', 'rm', 'age', 'dis', 'rad', 'tax',
+                'ptratio', 'b', 'lstat']
+    X, y = df[colnames].values, df['price'].values,
+    if return_X_y:
+        return X, y
+    return {"data": X, "target": y, 'feature_names': colnames}
