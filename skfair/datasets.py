@@ -1,16 +1,12 @@
 import os
-from os.path import dirname, exists, join
-from os import makedirs, remove
-import pathlib
-
-import numpy as np
-import pandas as pd
+import shutil
+import warnings
 from pkg_resources import resource_filename
 
-from urllib.request import urlretrieve
-import warnings
-from skfair.warning import FairnessWarning
+import requests
+import pandas as pd
 from sklearn.datasets import get_data_home
+from skfair.warning import FairnessWarning
 
 
 def load_arrests(return_X_y=False, give_pandas=False):
@@ -95,10 +91,6 @@ def load_boston(return_X_y=False, give_pandas=False):
     return {"data": X, "target": y, 'feature_names': colnames}
 
 
-import requests
-import shutil
-
-
 def download_file(url, local_filename):
     with requests.get(url, stream=True, verify=False) as r:
         with open(local_filename, 'wb') as f:
@@ -135,10 +127,10 @@ def fetch_adult(data_home=None, give_pandas=False, download_if_missing=True, ret
            'income'], dtype='object')
     """
     data_home = get_data_home(data_home=data_home)
-    if not exists(data_home):
-        makedirs(data_home)
-    filepath = str(pathlib.Path(data_home) / "adult.zip")
-    if not exists(filepath):
+    if not os.path.exists(data_home):
+        os.makedirs(data_home)
+    filepath = os.path.join(data_home, "adult.zip")
+    if not os.path.exists(filepath):
         if not download_if_missing:
             raise IOError("Data not found and `download_if_missing` is False")
 

@@ -41,6 +41,7 @@ clean:
 	rm -rf docs
 	rm -rf scikit_fairness.egg-info
 	rm -rf .ipynb_checkpoints
+	rm -rf */.ipynb_checkpoints
 	rm -rf .coverage*
 	rm -rf tests/**/__pycache__
 
