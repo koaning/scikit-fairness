@@ -7,6 +7,7 @@ import numpy as np
 import pandas as pd
 from pkg_resources import resource_filename
 
+from urllib.request import urlretrieve
 import warnings
 from skfair.warning import FairnessWarning
 from sklearn.datasets import get_data_home
@@ -43,7 +44,7 @@ def load_arrests(return_X_y=False, give_pandas=False):
     """
     filepath = resource_filename("skfair", os.path.join("data", "arrests.zip"))
     df = pd.read_csv(filepath)
-    warnings.warn(FairnessWarning("You are about to play with a potentially unfair dataset."))
+    warnings.warn(FairnessWarning("You are about to play with an unfair dataset."))
 
     if give_pandas:
         return df
@@ -94,20 +95,44 @@ def load_boston(return_X_y=False, give_pandas=False):
     return {"data": X, "target": y, 'feature_names': colnames}
 
 
-def fetch_olivetti_faces(data_home=None, download_if_missing=True, return_X_y=False):
+import requests
+import shutil
+
+
+def download_file(url, local_filename):
+    with requests.get(url, stream=True, verify=False) as r:
+        with open(local_filename, 'wb') as f:
+            shutil.copyfileobj(r.raw, f)
+    return local_filename
+
+
+def fetch_adult(data_home=None, give_pandas=False, download_if_missing=True, return_X_y=False):
     """
     Load the ADULT INCOME dataset.
     Download it if necessary from github.
+
     ----------
-    data_home : optional, default: None
-        Specify another download and cache folder for the datasets. By default
-        all scikit-learn data is stored in '~/scikit_learn_data' subfolders.
-    download_if_missing : optional, True by default
-        If False, raise a IOError if the data is not locally available
-        instead of trying to download the data from the source site.
-    return_X_y : boolean, default=False.
-        If True, returns `(data, target)` instead of a `Bunch` object. See
-        below for more information about the `data` and `target` object.
+
+    :param data_home : Specify another download and cache folder for the datasets. By default
+        all scikit-learn data is stored in '~/scikit_learn_data' subfolders. optional, default: None
+    :param give_pandas: give the pandas dataframe instead of X, y matrices (default=False)
+    :param download_if_missing : If False, raise a IOError if the data is not locally available instead
+    of trying to download the data from the source site.  True by default
+    :param return_X_y : If True, returns `(data, target)` instead of a dictionary. See
+    below for more information about the `data` and `target` object.
+
+    :Example:
+    >>> from sklego.datasets import fetch_adult
+    >>> X, y = fetch_adult(return_X_y=True)
+    >>> X.shape
+    (32561,, 14)
+    >>> y.shape
+    (32561,)
+    >>> fetch_adult(give_pandas=True).columns
+    Index(['age', 'workclass', 'fnlwgt', 'education', 'education.num',
+           'marital.status', 'occupation', 'relationship', 'race', 'sex',
+           'capital.gain', 'capital.loss', 'hours.per.week', 'native.country',
+           'income'], dtype='object')
     """
     data_home = get_data_home(data_home=data_home)
     if not exists(data_home):
@@ -117,44 +142,17 @@ def fetch_olivetti_faces(data_home=None, download_if_missing=True, return_X_y=Fa
         if not download_if_missing:
             raise IOError("Data not found and `download_if_missing` is False")
 
-        print('downloading Olivetti faces from %s to %s'
-              % (FACES.url, data_home))
-        mat_path = _fetch_remote(FACES, dirname=data_home)
-        mfile = loadmat(file_name=mat_path)
-        # delete raw .mat data
-        remove(mat_path)
-
-        faces = mfile['faces'].T.copy()
-        joblib.dump(faces, filepath, compress=6)
-        del mfile
-    else:
-        faces = _refresh_cache([filepath], 6)
-        # TODO: Revert to the following line in v0.23
-        # faces = joblib.load(filepath)
-
-    # We want floating point data, but float32 is enough (there is only
-    # one byte of precision in the original uint8s anyway)
-    faces = np.float32(faces)
-    faces = faces - faces.min()
-    faces /= faces.max()
-    faces = faces.reshape((400, 64, 64)).transpose(0, 2, 1)
-    # 10 images per class, 400 images total, each class is contiguous.
-    target = np.array([i // 10 for i in range(400)])
-    if shuffle:
-        random_state = check_random_state(random_state)
-        order = random_state.permutation(len(faces))
-        faces = faces[order]
-        target = target[order]
-    faces_vectorized = faces.reshape(len(faces), -1)
-
-    module_path = dirname(__file__)
-    with open(join(module_path, 'descr', 'olivetti_faces.rst')) as rst_file:
-        fdescr = rst_file.read()
-
+        print(f"downloading dataset to {data_home}")
+        url = "https://github.com/koaning/scikit-fairness/raw/master/data/adult-census-income.zip"
+        download_file(url, filepath)
+    df = pd.read_csv(filepath)
+    warnings.warn(FairnessWarning("You are about to play with an unfair dataset."))
+    if give_pandas:
+        return df
+    colnames = ['age', 'workclass', 'fnlwgt', 'education', 'education.num',
+                'marital.status', 'occupation', 'relationship', 'race', 'sex',
+                'capital.gain', 'capital.loss', 'hours.per.week', 'native.country']
+    X, y = df[colnames].values, df['income'].values,
     if return_X_y:
-        return faces_vectorized, target
-
-    return Bunch(data=faces_vectorized,
-                 images=faces,
-                 target=target,
-                 DESCR=fdescr)
+        return X, y
+    return {"data": X, "target": y, 'feature_names': colnames}
