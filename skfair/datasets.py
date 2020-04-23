@@ -20,7 +20,7 @@ def load_arrests(return_X_y=False, give_pandas=False):
     :param give_pandas: give the pandas dataframe instead of X, y matrices (default=False)
 
     :Example:
-    >>> from sklego.datasets import load_arrests
+    >>> from skfair.datasets import load_arrests
     >>> X, y = load_arrests(return_X_y=True)
     >>> X.shape
     (5226, 7)
@@ -66,13 +66,13 @@ def load_boston(return_X_y=False, give_pandas=False):
     :param give_pandas: give the pandas dataframe instead of X, y matrices (default=False)
 
     :Example:
-    >>> from sklego.datasets import load_boston
+    >>> from skfair.datasets import load_boston
     >>> X, y = load_boston(return_X_y=True)
     >>> X.shape
     (506, 13)
     >>> y.shape
     (506,)
-    >>> load_arrests(give_pandas=True).columns
+    >>> load_boston(give_pandas=True).columns
     Index(['crim', 'zn', 'indus', 'chas', 'nox', 'rm', 'age', 'dis', 'rad', 'tax',
            'ptratio', 'b', 'lstat', 'price'],
           dtype='object')
@@ -114,17 +114,18 @@ def fetch_adult(data_home=None, give_pandas=False, download_if_missing=True, ret
     below for more information about the `data` and `target` object.
 
     :Example:
-    >>> from sklego.datasets import fetch_adult
+    >>> from skfair.datasets import fetch_adult
     >>> X, y = fetch_adult(return_X_y=True)
     >>> X.shape
-    (32561,, 14)
+    (32561, 14)
     >>> y.shape
     (32561,)
     >>> fetch_adult(give_pandas=True).columns
     Index(['age', 'workclass', 'fnlwgt', 'education', 'education.num',
            'marital.status', 'occupation', 'relationship', 'race', 'sex',
            'capital.gain', 'capital.loss', 'hours.per.week', 'native.country',
-           'income'], dtype='object')
+           'income'],
+          dtype='object')
     """
     data_home = get_data_home(data_home=data_home)
     if not os.path.exists(data_home):
