@@ -109,4 +109,3 @@ class _FairClassifier(BaseEstimator, LinearClassifierMixin):
     def _add_intercept(self, X):
         if self.fit_intercept:
             return np.c_[np.ones(len(X)), X]
-

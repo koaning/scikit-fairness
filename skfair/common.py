@@ -1,10 +1,4 @@
 import collections
-import hashlib
-
-import numpy as np
-import pandas as pd
-from sklearn.base import TransformerMixin
-from sklearn.utils.validation import check_is_fitted, check_array, check_X_y
 
 
 def as_list(val):
