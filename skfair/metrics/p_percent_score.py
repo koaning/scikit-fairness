@@ -13,9 +13,6 @@ def p_percent_score(sensitive_column, positive_target=1):
 
     This is especially useful to use in situations where "fairness" is a theme.
 
-    Usage:
-    `p_percent_score('gender')(clf, X, y)`
-
     source:
     - M. Zafar et al. (2017), Fairness Constraints: Mechanisms for Fair Classification
 

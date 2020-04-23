@@ -32,7 +32,7 @@ notebook:
 
 docs:
 	rm -rf doc/.ipynb_checkpoints
-	sphinx-build doc docs
+	sphinx-build -a -E doc docs
 
 clean:
 	rm -rf .pytest_cache
