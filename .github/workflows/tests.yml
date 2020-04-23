@@ -32,3 +32,5 @@ jobs:
         pytest
     - name: Doctest
       run: python -m doctest -v skfair/*.py
+    - name: Notebook Test
+      run: pytest --nbval-lax doc/*.ipynb

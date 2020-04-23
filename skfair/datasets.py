@@ -20,6 +20,7 @@ def load_arrests(return_X_y=False, give_pandas=False):
     :param give_pandas: give the pandas dataframe instead of X, y matrices (default=False)
 
     :Example:
+
     >>> from skfair.datasets import load_arrests
     >>> X, y = load_arrests(return_X_y=True)
     >>> X.shape
@@ -66,6 +67,7 @@ def load_boston(return_X_y=False, give_pandas=False):
     :param give_pandas: give the pandas dataframe instead of X, y matrices (default=False)
 
     :Example:
+
     >>> from skfair.datasets import load_boston
     >>> X, y = load_boston(return_X_y=True)
     >>> X.shape
@@ -91,7 +93,7 @@ def load_boston(return_X_y=False, give_pandas=False):
     return {"data": X, "target": y, 'feature_names': colnames}
 
 
-def download_file(url, local_filename):
+def _download_file(url, local_filename):
     with requests.get(url, stream=True, verify=False) as r:
         with open(local_filename, 'wb') as f:
             shutil.copyfileobj(r.raw, f)
@@ -103,17 +105,16 @@ def fetch_adult(data_home=None, give_pandas=False, download_if_missing=True, ret
     Load the ADULT INCOME dataset.
     Download it if necessary from github.
 
-    ----------
-
-    :param data_home : Specify another download and cache folder for the datasets. By default
+    :param data_home: Specify another download and cache folder for the datasets. By default
         all scikit-learn data is stored in '~/scikit_learn_data' subfolders. optional, default: None
     :param give_pandas: give the pandas dataframe instead of X, y matrices (default=False)
-    :param download_if_missing : If False, raise a IOError if the data is not locally available instead
-    of trying to download the data from the source site.  True by default
-    :param return_X_y : If True, returns `(data, target)` instead of a dictionary. See
-    below for more information about the `data` and `target` object.
+    :param download_if_missing: If False, raise a IOError if the data is not locally available instead
+        of trying to download the data from the source site.  True by default
+    :param return_X_y: If True, returns `(data, target)` instead of a dictionary. See
+        below for more information about the `data` and `target` object.
 
     :Example:
+
     >>> from skfair.datasets import fetch_adult
     >>> X, y = fetch_adult(return_X_y=True)
     >>> X.shape
@@ -137,7 +138,7 @@ def fetch_adult(data_home=None, give_pandas=False, download_if_missing=True, ret
 
         print(f"downloading dataset to {data_home}")
         url = "https://github.com/koaning/scikit-fairness/raw/master/data/adult-census-income.zip"
-        download_file(url, filepath)
+        _download_file(url, filepath)
     df = pd.read_csv(filepath)
     warnings.warn(FairnessWarning("You are about to play with an unfair dataset."))
     if give_pandas:
