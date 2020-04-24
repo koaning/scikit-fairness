@@ -5,26 +5,26 @@ import numpy as np
 
 
 def true_false_positive_negative(conf_matrix):
-        # conf matrix: rows are true, cols are pred
-        if conf_matrix.shape == (2,2): # binary case
-            tn, fp, fn, tp = conf_matrix.ravel()
-            return tn, fp, fn, tp
-        tp = 0
-        fp = 0
-        fn = 0
-        tn = 0
-        # A second check on the below is appreciated.
-        for i in range(conf_matrix.shape[0]):
-            tp += conf_matrix[i,i]
-            fn += conf_matrix[i,:].sum() - conf_matrix[i,i]
-            fp += conf_matrix[:,i].sum() - conf_matrix[i,i]
-            tn += conf_matrix[:i-1,:i-1].sum() + conf_matrix[:i-1,i+1:].sum() + conf_matrix[i+1:,:i-1].sum() + conf_matrix[i+1:i+1:].sum()
+    # conf matrix: rows are true, cols are pred
+    if conf_matrix.shape == (2, 2):  # binary case
+        tn, fp, fn, tp = conf_matrix.ravel()
         return tn, fp, fn, tp
+    tp = 0
+    fp = 0
+    fn = 0
+    tn = 0
+    # A second check on the below is appreciated.
+    for i in range(conf_matrix.shape[0]):
+        tp += conf_matrix[i, i]
+        fn += conf_matrix[i, :].sum() - conf_matrix[i, i]
+        fp += conf_matrix[:, i].sum() - conf_matrix[i, i]
+        tn += (conf_matrix[:i-1, :i-1].sum() + conf_matrix[:i-1, i+1:].sum() +
+               conf_matrix[i+1:, :i-1].sum() + conf_matrix[i+1:i+1:].sum())
+    return tn, fp, fn, tp
+
 
 def classification_fairness_report(y_true, y_pred, groups, group_names=None,
                                    labels=None, output_dict=False):
-    unique_groups = set(groups)
-
     grouped_data = defaultdict(list)
     for i, (y_t, y_p) in enumerate(zip(y_true, y_pred)):
         group_key = group_names[i] if group_names else groups[i]
@@ -55,7 +55,7 @@ def classification_fairness_report(y_true, y_pred, groups, group_names=None,
     else:
         headers = [v.keys() for k, v in report_dict.items()][0]
 
-        # almost identical to from https://github.com/scikit-learn/scikit-learn/blob/master/sklearn/metrics/_classification.py
+        # almost identical to https://github.com/scikit-learn/scikit-learn/blob/master/sklearn/metrics/_classification.py
         width = max(len(cn) for cn in grouped_data.keys())
         head_fmt = '{:>{width}s} ' + ' {:>10}' * (len(headers))
         report = head_fmt.format('', *headers, width=width)
@@ -68,10 +68,11 @@ def classification_fairness_report(y_true, y_pred, groups, group_names=None,
         report += '\n'
         return report
 
+
 if __name__ == '__main__':
-    y_true = np.array([0,0,1,1,1])
-    y_pred = np.array([0,0,0,1,1])
-    groups = np.array([1,0,1,0,1])
+    y_true = np.array([0, 0, 1, 1, 1])
+    y_pred = np.array([0, 0, 0, 1, 1])
+    groups = np.array([1, 0, 1, 0, 1])
     group_names = ["b", "r", "b", "r", "b"]
 
     report = classification_fairness_report(y_true, y_pred, groups, group_names)
@@ -80,9 +81,9 @@ if __name__ == '__main__':
     report = classification_fairness_report(y_true, y_pred, groups, group_names, output_dict=True)
     print(report)
 
-    y_true = np.array([0,0,1,1,1,2,2])
-    y_pred = np.array([0,0,0,1,1,2,0])
-    groups = np.array([1,0,1,0,1,0,1])
+    y_true = np.array([0, 0, 1, 1, 1, 2, 2])
+    y_pred = np.array([0, 0, 0, 1, 1, 2, 0])
+    groups = np.array([1, 0, 1, 0, 1, 0, 1])
     group_names = ["b", "r", "b", "r", "b", "r", "b"]
 
     report = classification_fairness_report(y_true, y_pred, groups, group_names, labels=[0, 1, 2])
