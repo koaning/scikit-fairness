@@ -2,7 +2,7 @@ from collections import defaultdict
 
 from sklearn.metrics import confusion_matrix
 import numpy as np
-
+import pandas as pd
 
 def true_false_positive_negative(conf_matrix):
     # conf matrix: rows are true, cols are pred
@@ -24,7 +24,7 @@ def true_false_positive_negative(conf_matrix):
 
 
 def classification_fairness_report(y_true, y_pred, groups, group_names=None,
-                                   labels=None, output_dict=False):
+                                   labels=None, output="text"):
     grouped_data = defaultdict(list)
     for i, (y_t, y_p) in enumerate(zip(y_true, y_pred)):
         group_key = group_names[i] if group_names else groups[i]
@@ -50,23 +50,25 @@ def classification_fairness_report(y_true, y_pred, groups, group_names=None,
             'Support': len(group_data)
         }
 
-    if output_dict:
+    if output == "dict":
         return report_dict
-    else:
-        headers = [v.keys() for k, v in report_dict.items()][0]
+    elif output == "pandas":
+        return pd.DataFrame(report_dict)
 
-        # almost identical to https://github.com/scikit-learn/scikit-learn/blob/master/sklearn/metrics/_classification.py
-        width = max(len(cn) for cn in grouped_data.keys())
-        head_fmt = '{:>{width}s} ' + ' {:>10}' * (len(headers))
-        report = head_fmt.format('', *headers, width=width)
-        report += '\n\n'
-        row_fmt = '{:>{width}s} ' + ' {:>10.{digits}f}' * (len(headers)-1) + ' {:>10}\n'
-        for row_name, row in report_dict.items():
-            row_values = [row_name] + list(row.values())
-            report += row_fmt.format(*row_values, width=width, digits=3)
+    headers = [v.keys() for k, v in report_dict.items()][0]
 
-        report += '\n'
-        return report
+    # almost identical to https://github.com/scikit-learn/scikit-learn/blob/master/sklearn/metrics/_classification.py
+    width = max(len(cn) for cn in grouped_data.keys())
+    head_fmt = '{:>{width}s} ' + ' {:>10}' * (len(headers))
+    report = head_fmt.format('', *headers, width=width)
+    report += '\n\n'
+    row_fmt = '{:>{width}s} ' + ' {:>10.{digits}f}' * (len(headers)-1) + ' {:>10}\n'
+    for row_name, row in report_dict.items():
+        row_values = [row_name] + list(row.values())
+        report += row_fmt.format(*row_values, width=width, digits=3)
+
+    report += '\n'
+    return report
 
 
 if __name__ == '__main__':
@@ -78,7 +80,7 @@ if __name__ == '__main__':
     report = classification_fairness_report(y_true, y_pred, groups, group_names)
     print(report)
 
-    report = classification_fairness_report(y_true, y_pred, groups, group_names, output_dict=True)
+    report = classification_fairness_report(y_true, y_pred, groups, group_names, output="dict")
     print(report)
 
     y_true = np.array([0, 0, 1, 1, 1, 2, 2])
