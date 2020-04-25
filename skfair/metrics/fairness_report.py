@@ -1,8 +1,34 @@
+from functools import partial
 from collections import defaultdict
 
-from sklearn.metrics import confusion_matrix
+from sklearn.metrics import (confusion_matrix, f1_score, precision_score,
+                             accuracy_score, recall_score)
 import numpy as np
 import pandas as pd
+
+
+def false_positive_score(y_true, y_pred, labels=None):
+    conf_matrix = confusion_matrix(y_true, y_pred, labels=labels)
+    tn, fp, fn, tp = true_false_positive_negative(conf_matrix)
+    eps = 1e-10
+    return fp / (fp + tn + eps)
+
+
+def false_discovery_score(y_true, y_pred, labels=None):
+    conf_matrix = confusion_matrix(y_true, y_pred, labels=labels)
+    tn, fp, fn, tp = true_false_positive_negative(conf_matrix)
+    eps = 1e-10
+    return fp / (tp + fp + eps)
+
+
+DEFAULT_METRICS = {
+    "TPR": partial(recall_score, average="micro"),
+    "FPR": false_positive_score,
+    "PPVR": partial(precision_score, average="micro"),
+    "FDR": false_discovery_score,
+    "ACC": accuracy_score,
+    "F1": partial(f1_score, average="micro")
+}
 
 
 def true_false_positive_negative(conf_matrix):
@@ -24,32 +50,30 @@ def true_false_positive_negative(conf_matrix):
     return tn, fp, fn, tp
 
 
+def yield_metrics(metrics):
+    if type(metrics) == list:
+        for metric in metrics:
+            yield metric.__name__, metric
+    else:
+        for metric_name, metric in metrics.items():
+            yield metric_name, metric
+
+
 def classification_fairness_report(y_true, y_pred, groups, group_names=None,
-                                   labels=None, output="text"):
+                                   labels=None, output="text",
+                                   metrics=DEFAULT_METRICS):
     grouped_data = defaultdict(list)
     for i, (y_t, y_p) in enumerate(zip(y_true, y_pred)):
         group_key = group_names[i] if group_names else groups[i]
         grouped_data[group_key].append((y_t, y_p))
 
-    report_dict = {}
+    report_dict = defaultdict(dict)
     for group_name, group_data in grouped_data.items():
         y_true_group, y_pred_group = zip(*group_data)
 
-        conf_matrix = confusion_matrix(y_true_group, y_pred_group, labels=labels)
-        tn, fp, fn, tp = true_false_positive_negative(conf_matrix)
-        eps = 1e-10
-        precision = tp / (tp + fp + eps)
-        recall = tp / (tp + fn + eps)
-
-        report_dict[group_name] = {
-            'TPR': recall,
-            'FPR': fp / (fp + tn + eps),
-            'PPVR': precision,
-            'FDR': fp / (tp + fp + eps),
-            'ACC': (tp + tn) / (tp + fp + tn + fn + eps),
-            'F1': 2 * precision * recall / (precision + recall + eps),
-            'Support': len(group_data)
-        }
+        for metric_name, metric in yield_metrics(metrics):
+            report_dict[group_name][metric_name] = metric(y_true_group, y_pred_group, labels)
+        report_dict[group_name]["Support"] = len(group_data)
 
     if output == "dict":
         return report_dict
