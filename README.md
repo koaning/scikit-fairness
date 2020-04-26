@@ -26,9 +26,11 @@ This package will offer tools at every step to make the pipeline more fair.
 
 #### Data
 
-We have datasets available that will help you benchmark your fairness tools.
+We have datasets available that will help you benchmark your fairness pipeline.
 
 - `skfair.datasets.load_arrests`
+- `skfair.datasets.load_boston`
+- `skfair.datasets.fetch_adult`
 
 #### Pre Processing
 
