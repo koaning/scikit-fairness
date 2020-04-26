@@ -74,5 +74,4 @@ Usage
    install
    contribution
    fairness_boston_housing.ipynb
-
    api/modules

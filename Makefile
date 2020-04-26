@@ -32,7 +32,7 @@ notebook:
 
 docs:
 	rm -rf doc/.ipynb_checkpoints
-	sphinx-build doc docs
+	sphinx-build -a -E doc docs
 
 clean:
 	rm -rf .pytest_cache
@@ -48,7 +48,7 @@ clean:
 black:
 	black skfair tests setup.py
 
-check: flake precommit test spelling clean
+check: flake precommit test clean
 
 pypi: clean
 	python setup.py sdist
