@@ -54,9 +54,11 @@ def yield_metrics(metrics):
     if type(metrics) == list:
         for metric in metrics:
             yield metric.__name__, metric
-    else:
+    elif type(metrics) == dict:
         for metric_name, metric in metrics.items():
             yield metric_name, metric
+    else:
+        raise ValueError("metrics should be either a list or a dict")
 
 
 def classification_fairness_report(y_true, y_pred, groups, group_names=None,
