@@ -50,7 +50,7 @@ def true_false_positive_negative(conf_matrix):
     return tn, fp, fn, tp
 
 
-def yield_metrics(metrics):
+def _yield_metrics(metrics):
     if type(metrics) == list:
         for metric in metrics:
             yield metric.__name__, metric
@@ -73,7 +73,7 @@ def classification_fairness_report(y_true, y_pred, groups, group_names=None,
     for group_name, group_data in grouped_data.items():
         y_true_group, y_pred_group = zip(*group_data)
 
-        for metric_name, metric in yield_metrics(metrics):
+        for metric_name, metric in _yield_metrics(metrics):
             report_dict[group_name][metric_name] = metric(y_true_group, y_pred_group, labels)
         report_dict[group_name]["Support"] = len(group_data)
 
