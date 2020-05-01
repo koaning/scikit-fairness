@@ -47,7 +47,7 @@ setup(
     version=skfair.__version__,
     description="a collection of utilities to make algorithms more fair",
     author="Vincent D. Warmerdam & Matthijs Brouns",
-    url="https://scikit-lego.readthedocs.io/en/latest/",
+    url="https://scikit-fairness.netlify.app/",
     packages=find_packages(exclude=["notebooks"]),
     package_data={"skfair": ["data/*.zip"]},
     install_requires=base_packages,

@@ -28,7 +28,7 @@ jobs:
         flake8 setup.py
     - name: Test with pytest
       run: |
-        pip install pytest
-        pytest
+        pip install pytest pytest-cov
+        pytest --cov skfair
     - name: Doctest
       run: python -m doctest -v skfair/*.py
