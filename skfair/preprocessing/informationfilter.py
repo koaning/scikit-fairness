@@ -7,12 +7,12 @@ from sklearn.utils.validation import check_is_fitted
 from skfair.common import as_list
 
 
-def scalar_projection(vec, unto):
+def _scalar_projection(vec, unto):
     return vec.dot(unto) / unto.dot(unto)
 
 
-def vector_projection(vec, unto):
-    return scalar_projection(vec, unto) * unto
+def _vector_projection(vec, unto):
+    return _scalar_projection(vec, unto) * unto
 
 
 class InformationFilter(BaseEstimator, TransformerMixin):
@@ -79,7 +79,7 @@ class InformationFilter(BaseEstimator, TransformerMixin):
         for i, c in enumerate(col_ids):
             vs[:, i] = X[:, col_ids[i]]
             for j in range(0, i):
-                vs[:, i] = vs[:, i] - vector_projection(vs[:, i], vs[:, j])
+                vs[:, i] = vs[:, i] - _vector_projection(vs[:, i], vs[:, j])
         return vs
 
     def fit(self, X, y=None):
@@ -95,7 +95,7 @@ class InformationFilter(BaseEstimator, TransformerMixin):
         # gram smidt process but only on sensitive attributes
         for i, col in enumerate(X_fair.T):
             for v in v_vectors.T:
-                X_fair[:, i] = X_fair[:, i] - vector_projection(X_fair[:, i], v)
+                X_fair[:, i] = X_fair[:, i] - _vector_projection(X_fair[:, i], v)
         # we want to learn matrix P: X P = X_fair
         # this means we first need to create X_fair in order to learn P
         self.projection_, resid, rank, s = np.linalg.lstsq(X, X_fair, rcond=None)
