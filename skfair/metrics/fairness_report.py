@@ -32,10 +32,10 @@ DEFAULT_METRICS = {
 
 
 def true_false_positive_negative(conf_matrix):
-    # conf matrix: rows are true, cols are pred
-    if conf_matrix.shape == (2, 2):  # binary case
-        tn, fp, fn, tp = conf_matrix.ravel()
-        return tn, fp, fn, tp
+    """
+    Get global true positive, false positive, true negative, false negative
+    from confusion matrix
+    """
     tp = 0
     fp = 0
     fn = 0
