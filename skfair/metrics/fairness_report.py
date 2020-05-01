@@ -79,7 +79,7 @@ def classification_fairness_report(y_true, y_pred, groups, group_names=None,
 
     if output == "dict":
         return report_dict
-    elif output == "pandas":
+    if output == "pandas":
         return pd.DataFrame(report_dict)
 
     headers = [v.keys() for k, v in report_dict.items()][0]
