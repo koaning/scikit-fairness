@@ -1,8 +1,10 @@
 from functools import partial
 from collections import defaultdict
 
+
 from sklearn.metrics import (f1_score, precision_score,
                              accuracy_score, recall_score)
+from terminaltables import AsciiTable
 import numpy as np
 import pandas as pd
 
@@ -52,19 +54,11 @@ def classification_fairness_report(y_true, y_pred, groups, group_names=None,
         return pd.DataFrame(report_dict)
 
     headers = [v.keys() for k, v in report_dict.items()][0]
-
-    # almost identical to https://github.com/scikit-learn/scikit-learn/blob/master/sklearn/metrics/_classification.py
-    width = max(len(cn) for cn in grouped_data.keys())
-    head_fmt = '{:>{width}s} ' + ' {:>10}' * (len(headers))
-    report = head_fmt.format('', *headers, width=width)
-    report += '\n\n'
-    row_fmt = '{:>{width}s} ' + ' {:>10.{digits}f}' * (len(headers)-1) + ' {:>10}\n'
-    for row_name, row in report_dict.items():
-        row_values = [row_name] + list(row.values())
-        report += row_fmt.format(*row_values, width=width, digits=3)
-
-    report += '\n'
-    return report
+    table_data = [[""] + list(headers)]
+    for group_name in report_dict:
+        table_data.append([group_name] + [f"{v:.3f}" for v in report_dict[group_name].values()])
+    table = AsciiTable(table_data)
+    return table.table
 
 
 if __name__ == '__main__':

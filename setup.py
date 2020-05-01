@@ -12,7 +12,8 @@ base_packages = [
     "autograd>=1.2",
     "cvxpy>=1.0.24",
     "Deprecated>=1.2.6",
-    "requests>=2.23.0"
+    "requests>=2.23.0",
+    "terminaltables==3.1.0"
 ]
 docs_packages = [
     "sphinx>=1.8.5",
