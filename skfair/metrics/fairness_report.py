@@ -1,24 +1,12 @@
 from functools import partial
 from collections import defaultdict
 
-from sklearn.metrics import (confusion_matrix, f1_score, precision_score,
+from sklearn.metrics import (f1_score, precision_score,
                              accuracy_score, recall_score)
 import numpy as np
 import pandas as pd
 
-
-def false_positive_score(y_true, y_pred, labels=None):
-    conf_matrix = confusion_matrix(y_true, y_pred, labels=labels)
-    tn, fp, fn, tp = true_false_positive_negative(conf_matrix)
-    eps = 1e-10
-    return fp / (fp + tn + eps)
-
-
-def false_discovery_score(y_true, y_pred, labels=None):
-    conf_matrix = confusion_matrix(y_true, y_pred, labels=labels)
-    tn, fp, fn, tp = true_false_positive_negative(conf_matrix)
-    eps = 1e-10
-    return fp / (tp + fp + eps)
+from skfair.metrics import false_discovery_score, false_positive_score
 
 
 DEFAULT_METRICS = {
@@ -29,25 +17,6 @@ DEFAULT_METRICS = {
     "ACC": accuracy_score,
     "F1": partial(f1_score, average="micro")
 }
-
-
-def true_false_positive_negative(conf_matrix):
-    """
-    Get global true positive, false positive, true negative, false negative
-    from confusion matrix
-    """
-    tp = 0
-    fp = 0
-    fn = 0
-    tn = 0
-    # A second check on the below is appreciated.
-    for i in range(conf_matrix.shape[0]):
-        tp += conf_matrix[i, i]
-        fn += conf_matrix[i, :].sum() - conf_matrix[i, i]
-        fp += conf_matrix[:, i].sum() - conf_matrix[i, i]
-        tn += (conf_matrix[:i-1, :i-1].sum() + conf_matrix[:i-1, i+1:].sum() +
-               conf_matrix[i+1:, :i-1].sum() + conf_matrix[i+1:i+1:].sum())
-    return tn, fp, fn, tp
 
 
 def _yield_metrics(metrics):
