@@ -49,6 +49,7 @@ class InformationFilter(BaseEstimator, TransformerMixin):
         self.alpha = alpha
 
     def _check_coltype(self, X):
+        check_array(X, estimator=self)
         for col in as_list(self.columns):
             if isinstance(col, str):
                 if isinstance(X, np.ndarray):
