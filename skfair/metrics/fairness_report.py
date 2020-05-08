@@ -5,7 +5,6 @@ from collections import defaultdict
 from sklearn.metrics import (f1_score, precision_score,
                              accuracy_score, recall_score)
 from terminaltables import AsciiTable
-import numpy as np
 import pandas as pd
 
 from skfair.metrics import false_discovery_score, false_positive_score
@@ -32,6 +31,15 @@ def _yield_metrics(metrics):
         raise ValueError("metrics should be either a list or a dict")
 
 
+def create_table_report(report_dict):
+    headers = [v.keys() for k, v in report_dict.items()][0]
+    table_data = [[""] + list(headers)]
+    for group_name in report_dict:
+        table_data.append([group_name] + [f"{v:.3f}" for v in report_dict[group_name].values()])
+    table = AsciiTable(table_data)
+    return table.table
+
+
 def classification_fairness_report(y_true, y_pred, groups, group_names=None,
                                    labels=None, output="text",
                                    metrics=DEFAULT_METRICS):
@@ -52,31 +60,4 @@ def classification_fairness_report(y_true, y_pred, groups, group_names=None,
         return report_dict
     if output == "pandas":
         return pd.DataFrame(report_dict)
-
-    headers = [v.keys() for k, v in report_dict.items()][0]
-    table_data = [[""] + list(headers)]
-    for group_name in report_dict:
-        table_data.append([group_name] + [f"{v:.3f}" for v in report_dict[group_name].values()])
-    table = AsciiTable(table_data)
-    return table.table
-
-
-if __name__ == '__main__':
-    y_true = np.array([0, 0, 1, 1, 1])
-    y_pred = np.array([0, 0, 0, 1, 1])
-    groups = np.array([1, 0, 1, 0, 1])
-    group_names = ["b", "r", "b", "r", "b"]
-
-    report = classification_fairness_report(y_true, y_pred, groups, group_names)
-    print(report)
-
-    report = classification_fairness_report(y_true, y_pred, groups, group_names, output="dict")
-    print(report)
-
-    y_true = np.array([0, 0, 1, 1, 1, 2, 2])
-    y_pred = np.array([0, 0, 0, 1, 1, 2, 0])
-    groups = np.array([1, 0, 1, 0, 1, 0, 1])
-    group_names = ["b", "r", "b", "r", "b", "r", "b"]
-
-    report = classification_fairness_report(y_true, y_pred, groups, group_names, labels=[0, 1, 2])
-    print(report)
+    return create_table_report(report_dict)
