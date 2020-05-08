@@ -14,6 +14,9 @@ def true_false_positive_negative(conf_matrix):
     FN: the sum of the row of true class minus TP
     TN: sum of the matrix minus TP+FP+FN
     """
+    if conf_matrix.shape == (2, 2):  # binary case
+        tn, fp, fn, tp = conf_matrix.ravel()
+        return tn, fp, fn, tp
     tp = 0
     fp = 0
     fn = 0
