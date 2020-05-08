@@ -26,6 +26,6 @@ def true_false_positive_negative(conf_matrix):
         tp += conf_matrix[i, i]
         fn += conf_matrix[i, :].sum() - conf_matrix[i, i]
         fp += conf_matrix[:, i].sum() - conf_matrix[i, i]
-        tn += (conf_matrix[:i-1, :i-1].sum() + conf_matrix[:i-1, i+1:].sum() +
-               conf_matrix[i+1:, :i-1].sum() + conf_matrix[i+1:i+1:].sum())
+        tn += (conf_matrix[:i, :i].sum() + conf_matrix[:i, i+1:].sum() +
+               conf_matrix[i+1:, :i].sum() + conf_matrix[i+1:, i+1:].sum())
     return tn, fp, fn, tp
